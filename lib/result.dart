@@ -3,7 +3,6 @@ import 'package:quize/home.dart';
 
 class Result extends StatelessWidget {
   final MyHomePage homePage= new MyHomePage();
-  int hoo;
   final int totalscore;
   Result(this.totalscore);
   String get resultPhrase {
