@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quize/ans.dart';
+import 'package:quize/result.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -30,18 +31,18 @@ class _MyHomePageState extends State<MyHomePage> {
       _questionindex++;
       answerwasselected = false;
     });
-    if(_questionindex >= _questions.length){
-      _resetQuize();
-    }
+    // if(_questionindex >= _questions.length){
+    //   _resetQuize();
+    // }
   }
-  void _resetQuize(){
-    setState(() {
-      _questionindex=0;
-      _totalscore=0;
-      answerwasselected = false;
-      endofquize=false;
-    });
-  }
+  // void _resetQuize(){
+  //   setState(() {
+  //     _questioni ndex=0;
+  //     _totalscore=0;
+  //     answerwasselected = false;
+  //     endofquize=false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ignore: void_checks
                 onPressed: (){
               if(endofquize==true){
-                Navigator.pushNamed(context, '/result');
+                  Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Result(
+                    _totalscore
+                  )));
               }
               else{
                 _nextQuestion();
@@ -90,19 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 return;
               }
                 },
-                child: Text(endofquize ? 'your quize are end ': 'Next question',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)
+                child: Text(endofquize ? 'Show the Score ': 'Next question',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)
             ),
           ),
           SizedBox(
             height: 20,
           ),
-          Text('your score are ${_totalscore.toString()}/${_questions.length}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.black),),
 
-
-          TextButton(onPressed: (){
-            _resetQuize();
-          },
-            child: Text('Reset the Quize'),)
         ],
 
       ),

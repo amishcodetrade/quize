@@ -4,7 +4,7 @@ class Answer extends StatelessWidget {
   final String answerText;
   final Color answerColor;
   final Function answertap;
-  Answer({this.answerText,this.answerColor,this.answertap});
+  Answer({ this.answerText, this.answerColor, this.answertap});
   @override
   Widget build(BuildContext context) {
     return InkWell(
