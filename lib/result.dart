@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:quize/home.dart';
 
 class Result extends StatelessWidget {
-  final MyHomePage homePage= new MyHomePage();
   final int totalscore;
   Result(this.totalscore);
   String get resultPhrase {
