@@ -7,24 +7,24 @@ class Result extends StatelessWidget {
   String get resultPhrase {
     String resultText;
     if (totalscore == 4) {
-      resultText = 'You are awesome!';
-      print(totalscore);
-    } else if (totalscore == 3) {
-      resultText = 'You Are Intermediate';
-      print(totalscore);
-    }else if (totalscore == 2) {
-      resultText = 'You Are Intermediate';
-      print(totalscore);
-    }    else if (totalscore == 1) {
-      resultText = 'You Are Bad';
-    }  else {
-      resultText = 'You are so Bad';
+      resultText = "Your answer are good";
+    }else if (totalscore > 1) {
+      resultText = 'Your answer are intermediate';
+    }else if (totalscore > 1) {
+      resultText = 'Your answer are intermediate';
+    }else if (totalscore == 1) {
+      resultText = 'Your answer are Bad';
+    }else {
+      resultText = 'You are failed';
     }
     return resultText;
   }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      appBar: AppBar(
+        title: Text('Result'),
+      ),
       body:Center(
         child: Column(
           children: [

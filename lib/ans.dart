@@ -7,6 +7,7 @@ class Answer extends StatelessWidget {
   Answer({ this.answerText, this.answerColor, this.answertap});
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       onTap:answertap,
       child: Container(
