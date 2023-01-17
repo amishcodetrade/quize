@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quize/ans.dart';
-import 'package:quize/result.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -12,6 +11,21 @@ class _MyHomePageState extends State<MyHomePage> {
   int _totalscore = 0;
   bool answerwasselected = false;
   bool endofquize = false;
+  String get resultPhrase {
+    String resultText;
+    if (_totalscore == 4) {
+      resultText = "Your answer are good";
+    } else if (_totalscore > 1) {
+      resultText = 'Your answer are intermediate';
+    } else if (_totalscore > 1) {
+      resultText = 'Your answer are intermediate';
+    } else if (_totalscore == 1) {
+      resultText = 'Your answer are Bad';
+    } else {
+      resultText = 'You are failed';
+    }
+    return resultText;
+  }
 
   void _questionAnswered(bool answerScore) {
     setState(() {
@@ -36,95 +50,102 @@ class _MyHomePageState extends State<MyHomePage> {
     // }
   }
 
-  // void _resetQuize(){
-  //   setState(() {
-  //     _questioni ndex=0;
-  //     _totalscore=0;
-  //     answerwasselected = false;
-  //     endofquize=false;
-  //   });
-  // }
+  void _resetQuize() {
+    setState(() {
+      _questionindex = 0;
+      _totalscore = 0;
+      answerwasselected = false;
+      endofquize = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Favorite quize'),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: Text(
-              _questions[_questionindex]['question'],
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ...(_questions[_questionindex]['answeres']
-                  as List<Map<String, Object>>)
-              .map(
-            (answer) => Answer(
-              answerText: answer['answertext'],
-              answerColor: answerwasselected
-                  ? answer['score']
-                      ? Colors.green
-                      : Colors.red
-                  : Colors.blue,
-              answertap: () {
-                if (answerwasselected) {
-                  return;
-                }
-                _questionAnswered(answer['score']);
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 40.0),
-                  backgroundColor: Colors.black,
-                  padding: EdgeInsets.all(20),
-                ),
-                // ignore: void_checks
-                onPressed: () {
-                  if (answerwasselected == false) {
-                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please selct answer before going to next question'),
-                    // ));
-                    return _questionindex;
-                  }
-                  if (endofquize == true) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Result(_totalscore)));
-                  } else {
-                    _nextQuestion();
-                  }
+        appBar: AppBar(
+          title: Text('Favorite quize'),
+        ),
+        body: endofquize != true
+            ? Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Text(
+                      _questions[_questionindex]['question'],
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ...(_questions[_questionindex]['answeres']
+                          as List<Map<String, Object>>)
+                      .map(
+                    (answer) => Answer(
+                      answerText: answer['answertext'],
+                      answertap: () {
+                        _questionAnswered(answer['score']);
+                        if (answerwasselected == false) {
+                          return _questionindex;
+                        }
 
-                },
-                child: Text(
-                  endofquize ? 'Show the score ' : 'Next question',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                )),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
-    );
+                        if (endofquize == true) {
+                        } else {
+                          _nextQuestion();
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              )
+            : Container(
+                color: Colors.white,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        resultPhrase,
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Your score are ${_totalscore.toString()} out of 4',
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          return _resetQuize();
+                        },
+                        child: Text('Reset the Quize'),
+                      )
+                    ],
+                  ),
+                ),
+              ));
   }
 }
-//answer
 
 //result screen
 
@@ -149,7 +170,7 @@ final _questions = const [
     ]
   },
   {
-    'question': 'what is your favorite Programming language',
+    'question': 'what is your favorite language',
     'answeres': [
       {'answertext': 'C', 'score': false},
       {'answertext': 'C++', 'score': false},
