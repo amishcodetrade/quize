@@ -12,7 +12,7 @@ class Answer extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         width: MediaQuery.of(context).size.width,
         height: 50,
-        color: Colors.blue,
+        color: Colors.red,
         child: Center(
             child: Text(
           answerText,

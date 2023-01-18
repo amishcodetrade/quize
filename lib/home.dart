@@ -1,107 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quize/ans.dart';
+import 'package:quize/model.dart';
 
 class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key}) : super(key: key);
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _questionindex = 0;
-  int _totalscore = 0;
-  bool answerwasselected = false;
-  bool endofquize = false;
-  String get resultPhrase {
-    String resultText;
-    if (_totalscore == 4) {
-      resultText = "Your answer are good";
-    } else if (_totalscore > 1) {
-      resultText = 'Your answer are intermediate';
-    } else if (_totalscore > 1) {
-      resultText = 'Your answer are intermediate';
-    } else if (_totalscore == 1) {
-      resultText = 'Your answer are Bad';
-    } else {
-      resultText = 'You are failed';
-    }
-    return resultText;
-  }
-
-  void _questionAnswered(bool answerScore) {
-    setState(() {
-      answerwasselected = true;
-      if (answerScore) {
-        _totalscore++;
-      }
-
-      if (_questionindex + 1 == _questions.length) {
-        endofquize = true;
-      }
-    });
-  }
-
-  void _nextQuestion() {
-    setState(() {
-      _questionindex++;
-      answerwasselected = false;
-    });
-    // if(_questionindex >= _questions.length){
-    //   _resetQuize();
-    // }
-  }
-
-  void _resetQuize() {
-    setState(() {
-      _questionindex = 0;
-      _totalscore = 0;
-      answerwasselected = false;
-      endofquize = false;
-    });
-  }
+  // int _questionindex = 0;
+  // int _totalscore = 0;
+  // bool answerwasselected = false;
+  // bool endofquize = false;
+  // void _questionAnswered(bool answerScore) {
+  //   setState(() {
+  //     answerwasselected = true;
+  //     if (answerScore) {
+  //       _totalscore++;
+  //     }
+  //
+  //     if (_questionindex + 1 == _questions.length) {
+  //       endofquize = true;
+  //     }
+  //   });
+  // }
+  //
+  // void _nextQuestion() {
+  //   setState(() {
+  //     _questionindex++;
+  //     answerwasselected = false;
+  //   });
+  // }
+  //
+  // void _resetQuize() {
+  //   setState(() {
+  //     _questionindex = 0;
+  //     _totalscore = 0;
+  //     answerwasselected = false;
+  //     endofquize = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    int index = Provider.of<Model>(context).index;
+    int score = Provider.of<Model>(context).score;
+    bool end = Provider.of<Model>(context).end;
+    String result = Provider.of<Model>(context).result;
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Favorite quize'),
+          title: const Text('Favorite quize'),
+          backgroundColor: Colors.red,
         ),
-        body: endofquize != true
+        body: end == false
             ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 20,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Center(
                     child: Text(
-                      _questions[_questionindex]['question'],
-                      style: TextStyle(
+                      Provider.of<Model>(context).questionn[index]['question'],
+                      style: const TextStyle(
                           fontSize: 25,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  ...(_questions[_questionindex]['answeres']
+                  ...(Provider.of<Model>(context).questionn[index]['answeres']
                           as List<Map<String, Object>>)
                       .map(
                     (answer) => Answer(
                       answerText: answer['answertext'],
                       answertap: () {
-                        _questionAnswered(answer['score']);
-                        if (answerwasselected == false) {
-                          return _questionindex;
-                        }
+                        Provider.of<Model>(context, listen: false)
+                            .questionAnswered(answer['score']);
 
-                        if (endofquize == true) {
+                        if (end == true) {
                         } else {
-                          _nextQuestion();
+                          return Provider.of<Model>(context, listen: false)
+                              .nextQuestion();
                         }
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
@@ -113,32 +108,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Text(
-                        resultPhrase,
-                        style: TextStyle(
+                        result,
+                        style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
-                        'Your score are ${_totalscore.toString()} out of 4',
-                        style: TextStyle(
+                        'Your score are ${score.toString()} out of 4',
+                        style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.red),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       TextButton(
                         onPressed: () {
-                          return _resetQuize();
+                          return Provider.of<Model>(context, listen: false)
+                              .resetQuize();
                         },
-                        child: Text('Reset the Quize'),
+                        child: const Text('Reset the Quize'),
                       )
                     ],
                   ),
@@ -147,9 +143,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-//result screen
-
-//question model
 final _questions = const [
   {
     'question': 'what is your favrite color',
@@ -187,4 +180,4 @@ final _questions = const [
       {'answertext': 'dsa', 'score': true},
     ],
   },
-]; //question model
+];
