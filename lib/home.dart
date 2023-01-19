@@ -4,7 +4,7 @@ import 'package:quize/ans.dart';
 import 'package:quize/model.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  const MyHomePage({Key key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -46,30 +46,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int index = Provider.of<Model>(context).index;
-    int score = Provider.of<Model>(context).score;
-    bool end = Provider.of<Model>(context).end;
-    String result = Provider.of<Model>(context).result;
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Favorite quize'),
           backgroundColor: Colors.red,
         ),
-        body: end == false
+        body: context.read<Model>().end == false
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Center(
                     child: Text(
-                      Provider.of<Model>(context).questionn[index]['question'],
+                      Provider.of<Model>(context)
+                          .questionn[context.read<Model>().index]['question'],
                       style: const TextStyle(
                           fontSize: 25,
                           color: Colors.black,
@@ -79,8 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ...(Provider.of<Model>(context).questionn[index]['answeres']
-                          as List<Map<String, Object>>)
+                  ...(Provider.of<Model>(context)
+                              .questionn[context.read<Model>().index]
+                          ['answeres'] as List<Map<String, Object>>)
                       .map(
                     (answer) => Answer(
                       answerText: answer['answertext'],
@@ -88,9 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         Provider.of<Model>(context, listen: false)
                             .questionAnswered(answer['score']);
 
-                        if (end == true) {
-                        } else {
-                          return Provider.of<Model>(context, listen: false)
+                        if (!context.read<Model>().end) {
+
+                           Provider.of<Model>(context, listen: false)
                               .nextQuestion();
                         }
                       },
@@ -112,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 50,
                       ),
                       Text(
-                        result,
+                        context.read<Model>().result,
                         style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
@@ -120,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 10,
                       ),
                       Text(
-                        'Your score are ${score.toString()} out of 4',
+                        'Your score are ${context.read<Model>().score.toString()} out of 4',
                         style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
@@ -142,42 +139,3 @@ class _MyHomePageState extends State<MyHomePage> {
               ));
   }
 }
-
-final _questions = const [
-  {
-    'question': 'what is your favrite color',
-    'answeres': [
-      {'answertext': 'Black', 'score': true},
-      {'answertext': 'Red', 'score': false},
-      {'answertext': 'Green', 'score': false},
-      {'answertext': 'White', 'score': false}
-    ],
-  },
-  {
-    'question': 'what is your Favorite Animal',
-    'answeres': [
-      {'answertext': 'Rabbit', 'score': false},
-      {'answertext': 'Snake', 'score': true},
-      {'answertext': 'Elephant', 'score': false},
-      {'answertext': 'Lion', 'score': false},
-    ]
-  },
-  {
-    'question': 'what is your favorite language',
-    'answeres': [
-      {'answertext': 'C', 'score': false},
-      {'answertext': 'C++', 'score': false},
-      {'answertext': 'Jave', 'score': true},
-      {'answertext': 'Dart', 'score': false},
-    ],
-  },
-  {
-    'question': 'what is your favorite subjecte',
-    'answeres': [
-      {'answertext': 'Computer programming', 'score': false},
-      {'answertext': 'Java', 'score': false},
-      {'answertext': 'AWT', 'score': false},
-      {'answertext': 'dsa', 'score': true},
-    ],
-  },
-];

@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
+        home: const MyHomePage(),
       ),
     );
   }

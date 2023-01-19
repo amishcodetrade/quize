@@ -96,9 +96,4 @@ class Model extends ChangeNotifier {
     endofquize = false;
     notifyListeners();
   }
-
-  void updateAccount(input) {
-    questionn = input;
-    notifyListeners();
-  }
 }
